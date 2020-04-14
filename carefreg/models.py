@@ -50,7 +50,7 @@ class Service(models.Model):
 class ProvidedServices(models.Model):
     service_date = models.DateField('Дата услуги', null = False, blank = False)
     cartridge = models.ForeignKey(Cartridge, on_delete = models.CASCADE, verbose_name = 'Картридж', null = False, blank = False)
-    servise = models.ForeignKey(Service, on_delete = models.CASCADE, verbose_name = 'Услуга', null = False, blank = False)
+    service = models.ForeignKey(Service, on_delete = models.CASCADE, verbose_name = 'Услуга', null = False, blank = False)
     service_price = models.DecimalField('Цена', max_digits = 10, decimal_places = 2, null = False, blank = True)
     invoice_num = models.CharField('Номер счета', max_length = 15, blank = True)
     invoice_date = models.DateField('Дата счета', null = True, blank = True)

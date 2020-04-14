@@ -3,7 +3,7 @@ from .models import DeviceModel, CartridgeModel, Device, Cartridge, Service, Pro
 # Register your models here.
 
 class ProvidedServicesAdmin(admin.ModelAdmin):
-    list_display = ('service_date', 'cartridge', 'servise', 'service_price', 'invoice_num', 'invoice_date')
+    list_display = ('service_date', 'cartridge', 'service', 'service_price', 'invoice_num', 'invoice_date')
     list_filter = ['service_date']
     search_fields = ['servise']
 
