@@ -1,0 +1,32 @@
+{% extends "carefreg/base.html" %}
+
+{% block page_title %}
+    <h1 class="mt-4">Перечень оказанных услуг</h1>
+{% endblock page_title %}
+{% block page_content %}
+    <table class="table table-bordered">
+        <thead>
+        <tr class="table-primary">
+            <th>Дата</th>
+            <th>Картридж</th>
+            <th>Услуга</th>
+            <th>Цена</th>
+            <th>№ счета</th>
+            <th>Дата счета</th>
+        </tr>
+        </thead>
+        <tbody class="table-striped">
+        {% for pservice in provided_service_list %}
+        <tr>
+            <td>{{pservice.service_date|date:"d.m.Y"}}</td>
+            <td>{{pservice.cartridge}}</td>
+            <td>{{pservice.service}}</td>
+            <td>{{pservice.service_price|default:"-"}}</td>
+            <td>{{pservice.invoice_num|default:"-"}}</td>
+            <td>{{pservice.invoice_date|default:"-"}}</td>
+            
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock page_content %}
