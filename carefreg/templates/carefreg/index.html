@@ -13,6 +13,7 @@
             <th>Цена</th>
             <th>№ счета</th>
             <th>Дата счета</th>
+            <th>Действия</th>
         </tr>
         </thead>
         <tbody class="table-striped">
@@ -23,8 +24,12 @@
             <td>{{pservice.service}}</td>
             <td>{{pservice.service_price|default:"-"}}</td>
             <td>{{pservice.invoice_num|default:"-"}}</td>
-            <td>{{pservice.invoice_date|default:"-"}}</td>
-            
+            {% if pservice.invoice_date %}
+                <td>{{pservice.invoice_date|date:"d.m.Y"}}</td>
+            {% else %}
+                <td>-</td>
+            {% endif %}
+            <td><a href="/admin/carefreg/providedservices/{{pservice.id}}/change/">Редактировать<a/></td>
         </tr>
         {% endfor %}
         </tbody>
