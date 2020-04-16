@@ -1,4 +1,5 @@
 {% load static %}
+{% load carefreg %}
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -20,19 +21,16 @@
     </head>
 
     <body>
-
         <div class="d-flex" id="wrapper">
 
             {% block sidebar %}
+            {% get_side_menu side_menu_content %}
             <div class="bg-light border-right" id="sidebar-wrapper">
                 <div class="sidebar-heading">{{ menu_title|default:"Главное меню" }}</div>
                 <div class="list-group list-group-flush">
-                    <a href="#" class="list-group-item list-group-item-action bg-light">Dashboard</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-light">Shortcuts</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-light">Overview</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-light">Events</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-light">Status</a>
+                    {% for menu_item in side_menu_content %}
+                    <a href="{% url menu_item.url %}" class="list-group-item list-group-item-action bg-light">{{menu_item.title}}</a>
+                    {% endfor %}
                 </div>
             </div>
             {% endblock sidebar %}
@@ -66,7 +64,6 @@
                         </ul>
                     </div>
                 </nav>
-
                 <div class="container-fluid">
                 {% block page_title %}
                     <h1 class="mt-4">Главное меню</h1>
