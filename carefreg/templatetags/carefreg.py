@@ -11,8 +11,8 @@ class SideMenu(template.Node):
         context[self.var_name] = [
             {'url' : 'carefreg:index', 'title' : 'Оказанные услуги'},
             {'url' : 'carefreg:services', 'title' : 'Услуги'},
-#            {'url' : 'devices/', 'title' : 'Устройства'},
-#            {'url' : 'cartridges/', 'title' : 'Картриджи'},
+            {'url' : 'carefreg:devices', 'title' : 'Устройства'},
+            {'url' : 'carefreg:cartridges', 'title' : 'Картриджи'},
         ]
         return ''
 
@@ -23,3 +23,14 @@ def get_side_menu(parser, token):
     except ValueError:
         raise template.TemplateSyntaxError("%r tag requires one argument - name of template variable" % token.contents.split()[0])
     return SideMenu(var_name)
+    
+@register.inclusion_tag('carefreg/table_row.html')
+def table_row(obj, fields_list):
+    try:
+        if isinstance(obj, dict):
+            data = {field : obj[field] for field in fields_list}
+        else:
+            data = {field : getattr(obj, field) for field in fields_list}
+    except:
+        raise template.TemplateSyntaxError("not all fields of %r exists in given object %r" % (fields_list, obj))
+    return {'table_row' : data}

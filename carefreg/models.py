@@ -15,12 +15,15 @@ class CartridgeModel(models.Model):
     
     def __str__(self):
         return f"{self.vendor_name} {self.model_name}"
-        
+ 
+class Department(models.Model):
+    department_name = models.CharField('Наименование отдела', max_length = 50, blank = False, unique = False)
+ 
 class Device(models.Model):
     device_model = models.ForeignKey(DeviceModel, on_delete = models.CASCADE, verbose_name = 'Модель устройства')
     serial_number = models.CharField('Серийный номер', max_length = 50, blank = False, unique = True)
     #
-    device_name = models.CharField('Имя устройства', max_length = 100, blank = True, unique = False)
+    device_name = models.CharField('Описание устройства', max_length = 100, blank = True, unique = False)
     #
     production_date = models.DateField('Дата изготовления', null = True, blank = True)
     start_date = models.DateField('Дата начала эксплуатации', null = True, blank = True)
@@ -51,7 +54,7 @@ class ProvidedServices(models.Model):
     service_date = models.DateField('Дата услуги', null = False, blank = False)
     cartridge = models.ForeignKey(Cartridge, on_delete = models.CASCADE, verbose_name = 'Картридж', null = False, blank = False)
     service = models.ForeignKey(Service, on_delete = models.CASCADE, verbose_name = 'Услуга', null = False, blank = False)
-    service_price = models.DecimalField('Цена', max_digits = 10, decimal_places = 2, null = False, blank = True)
+    service_price = models.DecimalField('Цена', max_digits = 10, decimal_places = 2, null = True, blank = True)
     invoice_num = models.CharField('Номер счета', max_length = 15, blank = True)
     invoice_date = models.DateField('Дата счета', null = True, blank = True)
     

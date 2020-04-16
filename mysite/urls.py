@@ -19,5 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('carefreg/', include('carefreg.urls')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name = 'admin'),
 ]
