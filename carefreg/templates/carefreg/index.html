@@ -7,6 +7,9 @@
     <table class="table table-bordered">
         <thead>
         <tr class="table-primary">
+        {% for field in model_fields %}
+            <th>{{ field }}</th>
+        {% endfor %}
             <th>Дата</th>
             <th>Картридж</th>
             <th>Услуга</th>
