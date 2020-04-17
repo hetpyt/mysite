@@ -8,8 +8,16 @@
 {% endblock page_title %}
 {% block page_content %}
     <form action="" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Сохранить">
+        <div>
+            {% csrf_token %}
+            <div class="form-set">
+                {% for field in form %}
+                    <div class="form-row">
+                    
+                    </div>
+                {% endfor %}
+            </div>
+            <input type="submit" value="Сохранить">
+        </div>
     </form>
 {% endblock page_content %}
