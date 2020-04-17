@@ -1,6 +1,8 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from django.views import generic
 from .models import ProvidedServices, Service, Device, Cartridge
+from .forms import ProvidedServiceForm
 
 # Create your views here.
 class IndexView(generic.ListView):
@@ -41,3 +43,19 @@ class CartridgesListView(generic.ListView):
     
     def get_queryset(self):
 	    return Cartridge.objects.all()
+
+def provided_services_detail(request):
+    if request.method == "POST":
+        form = ProvidedServiceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('carefreg/')
+        else:
+            context = {'form' : form}
+            context['page_title'] = 'Оказанная услуга'
+            return render(request, 'carefreg/form.html', context)
+    else:
+        form = ProvidedServiceForm()
+        context = {'form' : form}
+        context['page_title'] = 'Оказанная услуга'
+        return render(request, 'carefreg/form.html', context)

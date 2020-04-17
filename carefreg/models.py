@@ -18,6 +18,7 @@ class CartridgeModel(models.Model):
  
 class Department(models.Model):
     department_name = models.CharField('Наименование отдела', max_length = 50, blank = False, unique = False)
+    abbreviated_name = models.CharField('Сокращенное наименование', max_length = 3, blank = False, unique = True)
  
 class Device(models.Model):
     device_model = models.ForeignKey(DeviceModel, on_delete = models.CASCADE, verbose_name = 'Модель устройства')
