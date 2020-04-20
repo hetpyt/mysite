@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.views import generic
 from .models import ProvidedServices, Service, Device, Cartridge
 from .forms import ProvidedServiceForm
@@ -49,13 +50,18 @@ def provided_services_detail(request):
         form = ProvidedServiceForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('carefreg/')
+            return HttpResponseRedirect(reverse('carefreg:index'))
         else:
+            for field_name in form.errors:
+                #print(form[field_name].field.widget.attrs)
+                css_class = form[field_name].field.widget.attrs.get('class', '')
+                form[field_name].field.widget.attrs.update({'class': ' '.join([css_class, 'is-invalid'])})
             context = {'form' : form}
             context['page_title'] = 'Оказанная услуга'
             return render(request, 'carefreg/form.html', context)
     else:
         form = ProvidedServiceForm()
+
         context = {'form' : form}
         context['page_title'] = 'Оказанная услуга'
         return render(request, 'carefreg/form.html', context)

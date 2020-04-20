@@ -8,16 +8,22 @@
 {% endblock page_title %}
 {% block page_content %}
     <form action="" method="post">
-        <div>
-            {% csrf_token %}
-            <div class="form-set">
-                {% for field in form %}
-                    <div class="form-row">
-                    
-                    </div>
-                {% endfor %}
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group row">
+            <div class="col-auto">
+                <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
+                {{ field }}
+                <div class="invalid-feedback">
+                {{ field.errors }}
+                </div>
             </div>
-            <input type="submit" value="Сохранить">
+        </div>
+        {% endfor %}
+        <div class="form-group row">
+            <div class="col-auto">
+                <input type="submit" value="Сохранить" class="btn btn-primary">
+            </div>
         </div>
     </form>
 {% endblock page_content %}

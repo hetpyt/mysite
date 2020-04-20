@@ -8,7 +8,7 @@
     <h1 class="mt-4">{{ page_title }}</h1>
 {% endblock page_title %}
 {% block page_content %}
-    <table class="table table-bordered">
+    <table class="table table-striped table-bordered">
         <thead>
         <tr class="table-primary">
         {% for field_name in model_fields.values %}
@@ -16,7 +16,7 @@
         {% endfor %}
         </tr>
         </thead>
-        <tbody class="table-striped">
+        <tbody>
         {% for obj in object_list %}
             {% table_row obj model_fields %}
         {% endfor %}
