@@ -20,10 +20,14 @@ class AbstractRelationship(models.Model):
         abstract = True
         
 class DeviceModel(AbstractDeviceModel):
-    pass
+    class Meta:
+        verbose_name = 'Модель устройства'
+        verbose_name_plural = 'Модели устройств'
     
 class CartridgeModel(AbstractDeviceModel):
-    pass
+    class Meta:
+        verbose_name = 'Модель картриджа'
+        verbose_name_plural = 'Модели картриджей'
     
 class Department(models.Model):
     department_name = models.CharField('Наименование отдела', max_length = 50, blank = False, unique = False)
@@ -31,6 +35,10 @@ class Department(models.Model):
 
     def __str__(self):
         return f"{self.department_name} ({self.abbreviated_name})"
+        
+    class Meta:
+        verbose_name = 'Отдел'
+        verbose_name_plural = 'Отделы'
         
 class Device(models.Model):
     device_model = models.ForeignKey(DeviceModel, on_delete = models.CASCADE, verbose_name = 'Модель устройства')
