@@ -57,6 +57,11 @@ class Device(models.Model):
             
     current_department_name.short_description = 'Текущий отдел'
     
+    class Meta:
+        verbose_name = 'Устройство'
+        verbose_name_plural = 'Устройства'
+    
+    
 class Cartridge(models.Model):
     cartridge_model = models.ForeignKey(CartridgeModel, on_delete = models.CASCADE, verbose_name = 'Модель картриджа')
     serial_number = models.CharField('Серийный номер', max_length = 50, blank = False, unique = True)
