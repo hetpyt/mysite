@@ -16,8 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponseRedirect
+
+def redir(*args, **kwargs):
+    return HttpResponseRedirect('carefreg/')
+
 urlpatterns = [
-    path('', HttpResponseRedirect('carefreg/').as_view()),
+    path('', redir),
     path('carefreg/', include('carefreg.urls')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls, name = 'admin'),
