@@ -93,7 +93,10 @@ class Cartridge(models.Model):
     
     current_department_name.short_description = 'Текущий отдел'
     current_device_name.short_description = 'Текущее устройство'
-
+    
+    class Meta:
+        verbose_name = 'Картридж'
+        verbose_name_plural = 'Картриджи'
 
 class Service(models.Model):
     service_name = models.CharField('Наименование услуги', max_length = 100, blank = False, unique = True)
@@ -101,7 +104,11 @@ class Service(models.Model):
     
     def __str__(self):
         return self.service_name
-
+        
+    class Meta:
+        verbose_name = 'Услуга'
+        verbose_name_plural = 'Услуги'
+        
 class RelCartridgeDevice(AbstractRelationship):
     """ Связи между картриджами и устройствами, в которых они используются, во времени """
     owner_device = models.ForeignKey(Device, on_delete = models.CASCADE, verbose_name = 'Устройство', null = False, blank = False)
@@ -113,6 +120,8 @@ class RelCartridgeDevice(AbstractRelationship):
             models.UniqueConstraint(fields = ['rel_date', 'cartridge', 'owner_device'], name = 'rel_cartridge_device__unique_date_cartridge_owner_device'),
         ]
         ordering = ('rel_date',)
+        verbose_name = 'Принадлежность картриджа устройству'
+        verbose_name_plural = 'Принадлежности картриджей устройствам'
 
 class RelDeviceDepartment(AbstractRelationship):
     """ Связи между устройствами и отделами, в которых они используются, во времени """
@@ -125,6 +134,8 @@ class RelDeviceDepartment(AbstractRelationship):
             models.UniqueConstraint(fields = ['rel_date', 'device', 'owner_dept'], name = 'rel_device_department__unique_date_device_owner_dept'),
         ]
         ordering = ('rel_date',)
+        verbose_name = 'Принадлежность устройства отделу'
+        verbose_name_plural = 'Принадлежности устройств отделам'
         
 class ProvidedServices(models.Model):
     service_date = models.DateField('Дата услуги', null = False, blank = False)
@@ -136,6 +147,10 @@ class ProvidedServices(models.Model):
     
     def __str__(self):
         return f"{self.service_date} {self.service} {self.cartridge}"
-    
+        
+    class Meta:
+        verbose_name = 'Предоставленные услуги'
+        verbose_name_plural = 'Предоставленная услуга'
+        
 __all__ = ['DeviceModel', 'CartridgeModel', 'Department', 'Device', 'Cartridge', 'Service',
     'RelCartridgeDevice', 'RelDeviceDepartment', 'ProvidedServices']
