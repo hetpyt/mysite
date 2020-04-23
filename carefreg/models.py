@@ -127,7 +127,7 @@ class RelCartridgeDevice(AbstractRelationship):
             models.UniqueConstraint(fields = ['rel_date', 'cartridge'], name = 'rel_cartridge_device__unique_date_cartridge'),
             models.UniqueConstraint(fields = ['rel_date', 'cartridge', 'owner_device'], name = 'rel_cartridge_device__unique_date_cartridge_owner_device'),
         ]
-        ordering = ('rel_date',)
+        ordering = ('-rel_date',)
         verbose_name = 'Принадлежность картриджа устройству'
         verbose_name_plural = 'Принадлежности картриджей устройствам'
 
@@ -141,7 +141,7 @@ class RelDeviceDepartment(AbstractRelationship):
             models.UniqueConstraint(fields = ['rel_date', 'device'], name = 'rel_device_department__unique_date_device'),
             models.UniqueConstraint(fields = ['rel_date', 'device', 'owner_dept'], name = 'rel_device_department__unique_date_device_owner_dept'),
         ]
-        ordering = ('rel_date',)
+        ordering = ('-rel_date',)
         verbose_name = 'Принадлежность устройства отделу'
         verbose_name_plural = 'Принадлежности устройств отделам'
         
@@ -157,6 +157,7 @@ class ProvidedServices(models.Model):
         return f"{self.service_date} {self.service} {self.cartridge}"
         
     class Meta:
+        ordering = ('-service_date',)
         verbose_name = 'Предоставленные услуги'
         verbose_name_plural = 'Предоставленная услуга'
         
