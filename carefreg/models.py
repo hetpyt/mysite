@@ -3,6 +3,8 @@ from django.utils import timezone
 # !!!есть картриджи, которые можно изпользовать на разных устройствах одного производителя
 
 class AbstractDeviceModel(models.Model):
+    """ Абстрактная модель устройства. Содержит общие для всех устройств атрибуты (наименование производителя,
+    наименование модели, etc)"""
     vendor_name = models.CharField('Производитель', max_length = 50, blank = False, unique = False)
     model_name = models.CharField('Модель', max_length = 50, blank = False, unique = False)
 
@@ -13,6 +15,7 @@ class AbstractDeviceModel(models.Model):
         abstract = True
 
 class AbstractRelationship(models.Model):
+    """ абстрактная модель связывающей таблицы """
     rel_date = models.DateField('Дата', db_index = True, null = False, blank = False)
     comment = models.CharField('Комментарий', max_length = 150, blank = True)
     
@@ -20,16 +23,19 @@ class AbstractRelationship(models.Model):
         abstract = True
         
 class DeviceModel(AbstractDeviceModel):
+    """ Модели устройств """
     class Meta:
         verbose_name = 'Модель устройства'
         verbose_name_plural = 'Модели устройств'
     
 class CartridgeModel(AbstractDeviceModel):
+    """ Модели картриджей """
     class Meta:
         verbose_name = 'Модель картриджа'
         verbose_name_plural = 'Модели картриджей'
     
 class Department(models.Model):
+    """ Отделы """
     department_name = models.CharField('Наименование отдела', max_length = 50, blank = False, unique = False)
     abbreviated_name = models.CharField('Аббревиатура', max_length = 3, blank = False, unique = True)
 
@@ -41,6 +47,7 @@ class Department(models.Model):
         verbose_name_plural = 'Отделы'
         
 class Device(models.Model):
+    """ Устройства (принтеры, МФУ, etc) """
     device_model = models.ForeignKey(DeviceModel, on_delete = models.CASCADE, verbose_name = 'Модель устройства')
     serial_number = models.CharField('Серийный номер', max_length = 50, blank = False, unique = True)
     #
@@ -71,6 +78,7 @@ class Device(models.Model):
     
     
 class Cartridge(models.Model):
+    """ Картриджи """
     cartridge_model = models.ForeignKey(CartridgeModel, on_delete = models.CASCADE, verbose_name = 'Модель картриджа')
     serial_number = models.CharField('Серийный номер', max_length = 50, blank = False, unique = True)
     #
@@ -80,6 +88,7 @@ class Cartridge(models.Model):
         return f"{self.cartridge_model} [{self.serial_number}]"
 
     def current_department_name(self):
+        RelCartridgeDevice.objects.filter(cartridge = self.id, rel_date__lte = now).order_by('-rel_date')
         return ''
         
     def current_device_name(self):
@@ -107,6 +116,7 @@ class Cartridge(models.Model):
         verbose_name_plural = 'Картриджи'
 
 class Service(models.Model):
+    """ Услуги """
     service_name = models.CharField('Наименование услуги', max_length = 100, blank = False, unique = True)
     default_price = models.DecimalField('Цена по умолчанию', max_digits = 10, decimal_places = 2, null = False, blank = True)
     
@@ -146,6 +156,7 @@ class RelDeviceDepartment(AbstractRelationship):
         verbose_name_plural = 'Принадлежности устройств отделам'
         
 class ProvidedServices(models.Model):
+    """ Оказанные услуги """
     service_date = models.DateField('Дата услуги', null = False, blank = False)
     cartridge = models.ForeignKey(Cartridge, on_delete = models.CASCADE, verbose_name = 'Картридж', null = False, blank = False)
     service = models.ForeignKey(Service, on_delete = models.CASCADE, verbose_name = 'Услуга', null = False, blank = False)
