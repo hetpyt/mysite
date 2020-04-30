@@ -83,7 +83,7 @@ class Cartridge(models.Model):
     serial_number = models.CharField('Серийный номер', max_length = 50, blank = False, unique = True)
     #
     start_date = models.DateField('Дата начала эксплуатации', null = True, blank = True)
-    device = models.ManyToManyField(Device, related_name='devices_history', through='RelCartridgeDevice', through_fields=('cartridge', 'owner_device'))
+    device = models.ManyToManyField(Device, related_name='cartridges', through='RelCartridgeDevice', through_fields=('cartridge', 'owner_device'))
     def __str__(self):
         return f"{self.cartridge_model} [{self.serial_number}]"
 
