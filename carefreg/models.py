@@ -56,6 +56,8 @@ class Device(models.Model):
     production_date = models.DateField('Дата изготовления', null = True, blank = True)
     start_date = models.DateField('Дата начала эксплуатации', null = True, blank = True)
 
+    department = models.ManyToManyField(Department, related_name='devices', through='RelDeviceDepartment', through_fields=('device', 'owner_dept'))
+
     def __str__(self):
         if self.device_name:
             return f"{self.device_model} ({self.device_name})"
@@ -84,32 +86,23 @@ class Cartridge(models.Model):
     #
     start_date = models.DateField('Дата начала эксплуатации', null = True, blank = True)
     device = models.ManyToManyField(Device, related_name='cartridges', through='RelCartridgeDevice', through_fields=('cartridge', 'owner_device'))
+
     def __str__(self):
         return f"{self.cartridge_model} [{self.serial_number}]"
 
-    def current_department_name(self):
-        RelCartridgeDevice.objects.filter(cartridge = self.id, rel_date__lte = now).order_by('-rel_date')
-        return ''
+    def current_department(self):
+        if not hasattr(self, '_current_device'):
+            self._current_device = self.current_device()
+        if not self._current_device:
+            return None
+        return Department.objects.filter(reldevicedepartment__device = self._current_device, reldevicedepartment__rel_date__lte = timezone.now()).order_by('-reldevicedepartment__rel_date').first()
         
-    def current_device_name(self):
-        now = timezone.now()
-        rel_dev_qs = RelCartridgeDevice.objects.filter(cartridge = self.id, rel_date__lte = now).select_related('owner_device').order_by('-rel_date')
-        if rel_dev_qs.exists():
-            
-            def get_current_department_name():
-                rel_dept_qs = RelDeviceDepartment.objects.filter(device = rel_dev_qs[0].owner_device.id, rel_date__lte = now).select_related('owner_dept').order_by('-rel_date')
-                if rel_dept_qs.exists():
-                    return str(rel_dept_qs[0].owner_dept)
-                else:
-                    return ''
-            self.current_department_name = get_current_department_name
-            
-            return str(rel_dev_qs[0].owner_device)
-        else:
-            return ''
+    def current_device(self):
+        self._current_device = self.device.filter(relcartridgedevice__rel_date__lte = timezone.now()).order_by('-relcartridgedevice__rel_date').first()
+        return self._current_device
     
-    current_department_name.short_description = 'Текущий отдел'
-    current_device_name.short_description = 'Текущее устройство'
+    current_department.short_description = 'Текущий отдел'
+    current_device.short_description = 'Текущее устройство'
     
     class Meta:
         verbose_name = 'Картридж'
